@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import './App.css'
 import {Todolist} from './Todolist'
 import {v1} from 'uuid'
+import {ModalWindow} from './components/ModalWindow'
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
@@ -40,13 +41,28 @@ function App() {
 
     return (
         <div className='App'>
-            <Todolist
-                title={'What to learn'}
-                tasks={prokladka}
-                tasksFilter={tasksFilter}
-                removeTask={removeTask}
-                addTask={addTask}
-            />
+            <ModalWindow name={'Window1'}>
+                <>
+                    <input type="text"/>
+                    <input type="text"/>
+                    <input type="checkbox"/>
+                </>
+            </ModalWindow>
+
+            <ModalWindow name={'Window22'}>
+                <>
+                    <button>xxx</button>
+                    <button>xxx</button>
+                    <input type="checkbox"/>
+                </>
+            </ModalWindow>
+            {/*<Todolist*/}
+            {/*    title={'What to learn'}*/}
+            {/*    tasks={prokladka}*/}
+            {/*    tasksFilter={tasksFilter}*/}
+            {/*    removeTask={removeTask}*/}
+            {/*    addTask={addTask}*/}
+            {/*/>*/}
         </div>
     )
 }
