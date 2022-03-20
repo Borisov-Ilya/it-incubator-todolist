@@ -3,36 +3,39 @@ import './App.css'
 import {Todolist} from './Todolist'
 import {v1} from 'uuid'
 
+export type FilterValuesType = 'all' | 'active' | 'completed'
 
 function App() {
-    let [tasks1, setTasks1] = useState([
+    let [tasks, setTasks] = useState([
         {id: v1(), title: 'HTML&CSS', isDone: true},
         {id: v1(), title: 'JS', isDone: true},
         {id: v1(), title: 'ReactJS', isDone: false},
+        {id: v1(), title: 'Rest API', isDone: false},
+        {id: v1(), title: 'GraphQL', isDone: false},
     ])
 
     const removeTask = (newId: string) => {
-        let filtered = tasks1.filter((el) => el.id !== newId)
-        setTasks1(filtered)
+        let filtered = tasks.filter((el) => el.id !== newId)
+        setTasks(filtered)
     }
 
-    let [valueButton, setValueButton] = useState('All')
+    let [filter, setFilter] = useState<FilterValuesType>('all')
 
-    const tasksFilter = (filterValue: string) => {
-        setValueButton(filterValue)
+    const tasksFilter = (value: FilterValuesType) => {
+        setFilter(value)
     }
 
     const addTask = (newTitle: string) => {
         let newTask = {id: v1(), title: newTitle, isDone: false}
-        setTasks1([newTask, ...tasks1])
+        setTasks([newTask, ...tasks])
     }
 
-    let prokladka = tasks1
-    if (valueButton === 'Active') {
-        prokladka = tasks1.filter(el => !el.isDone)
+    let prokladka = tasks
+    if (filter === 'active') {
+        prokladka = tasks.filter(el => !el.isDone)
     }
-    if (valueButton === 'Completed') {
-        prokladka = tasks1.filter(el => el.isDone)
+    if (filter === 'completed') {
+        prokladka = tasks.filter(el => el.isDone)
     }
 
     return (
