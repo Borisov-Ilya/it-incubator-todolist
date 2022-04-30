@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import './App.css'
 import {TaskType, Todolist} from './Todolist'
 import {v1} from 'uuid'
+import AddItemForm from './AddItemForm'
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 type TodolistType = {
@@ -51,7 +52,7 @@ function App() {
         setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
     }
 
-    function changeStatus(taskId: string, isDone: boolean, todolistId: string) {
+    function changeTaskStatus(taskId: string, isDone: boolean, todolistId: string) {
         setTasks({
             ...tasks,
             [todolistId]: tasks[todolistId]
@@ -59,8 +60,20 @@ function App() {
         })
     }
 
-    function changeFilter(filter: FilterValuesType, todolistId: string) {
+    function changeTaskTitle(taskId: string, title: string, todolistId: string) {
+        setTasks({
+            ...tasks,
+            [todolistId]: tasks[todolistId]
+                .map(t => t.id === taskId ? {...t, title} : t)
+        })
+    }
+
+    function changeTodolistFilter(filter: FilterValuesType, todolistId: string) {
         setTodolists(todolists.map(tl => tl.id === todolistId ? {...tl, filter} : tl))
+    }
+
+    function changeTodolistTitle(title: string, todolistId: string) {
+        setTodolists(todolists.map(tl => tl.id === todolistId ? {...tl, title} : tl))
     }
 
     function removeTodolist(todolistId: string) {
@@ -68,6 +81,17 @@ function App() {
         const copyTasks = {...tasks}
         delete copyTasks[todolistId]
         setTasks(copyTasks)
+    }
+
+    function addTodolist(title: string) {
+        const newTodolistID = v1()
+        const newTodolist: TodolistType = {
+            id: newTodolistID,
+            title: title,
+            filter: 'all'
+        }
+        setTodolists([...todolists, newTodolist])
+        setTasks({...tasks, [newTodolistID]: []})
     }
 
     const todolistsComponents = todolists.map(tl => {
@@ -88,15 +112,18 @@ function App() {
                 tasks={tasksForTodolist}
                 addTask={addTask}
                 removeTask={removeTask}
-                changeFilter={changeFilter}
-                changeTaskStatus={changeStatus}
+                changeFilter={changeTodolistFilter}
+                changeTaskStatus={changeTaskStatus}
                 removeTodolist={removeTodolist}
+                changeTaskTitle={changeTaskTitle}
+                changeTodolistTitle={changeTodolistTitle}
             />
         )
     })
 
     return (
         <div className="App">
+            <AddItemForm addItem={addTodolist}/>
             {todolistsComponents}
         </div>
     )
